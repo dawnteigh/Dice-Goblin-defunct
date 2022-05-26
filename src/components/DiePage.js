@@ -34,8 +34,6 @@ const DiePage = ({ die }) => {
 
   const valuesObj = objectifyValues(diceValues)
 
-  
-
   useEffect(() => {
     fetch(`http://localhost:6001/${die}`)
     .then(r => r.json())
@@ -44,10 +42,26 @@ const DiePage = ({ die }) => {
     console.log(valuesObj)
   }, [die])
 
+  const addDie = (desc) => {
+    fetch(`http://localhost:6001/${die}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"},
+        body: JSON.stringify({
+          ...valuesObj,
+          desc: desc,
+          total: 0
+        })
+    })
+    .then(r => r.json())
+    .then(data => setDice(...dice, data))
+    .catch(err => console.log("man, you goofed"))
+  }
+
   return (
     <div>
       {die}
-      <DieForm />
+      <DieForm addDie={addDie} />
     </div>
   )
 }
