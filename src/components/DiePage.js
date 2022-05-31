@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import DieForm from './DieForm'
+import DieDisplay from './DieDisplay'
+import DieCard from './DieCard'
 
 const DiePage = ({ die }) => {
 
@@ -39,8 +41,7 @@ const DiePage = ({ die }) => {
     .then(r => r.json())
     .then(data => setDice(data))
     .catch(err => console.log("yo bud something aint right"))
-    console.log(valuesObj)
-  }, [die])
+  }, [])
 
   const addDie = (desc) => {
     fetch(`http://localhost:6001/${die}`, {
@@ -50,18 +51,23 @@ const DiePage = ({ die }) => {
         body: JSON.stringify({
           ...valuesObj,
           desc: desc,
-          total: 0
+          total: 0,
+          avg: 0
         })
     })
     .then(r => r.json())
-    .then(data => setDice(...dice, data))
+    .then(data => setDice([...dice, data]))
     .catch(err => console.log("man, you goofed"))
   }
+
+  const displayDice = dice.map(d => <DieCard key={d.id} die={d} />)
 
   return (
     <div>
       {die}
       <DieForm addDie={addDie} />
+      <DieDisplay />
+      {displayDice}
     </div>
   )
 }
