@@ -1,8 +1,12 @@
 import React from 'react'
 
-const DieCard = () => {
+const DieCard = ({ die }) => {
   return (
-    <div>DieCard</div>
+        <div>
+            <p><b>{die.desc}</b></p>
+            <p>Average: {die.avg}</p>
+            <p>Total Rolls: {die.total}</p>
+        </div>
   )
 }
 

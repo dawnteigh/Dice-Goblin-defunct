@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import DieForm from './DieForm'
 import DieDisplay from './DieDisplay'
-import DieCard from './DieCard'
+import DieList from './DieList'
 
 const DiePage = ({ die }) => {
 
   const [dice, setDice] = useState([])
+  const [selectedDie, setSelectedDie] = useState(null)
 
   const numOfButtons = parseInt(die.replace(/\D/g, ''))
   const looper = (num) => {
@@ -49,7 +50,7 @@ const DiePage = ({ die }) => {
       headers: {
         "Content-Type": "application/json"},
         body: JSON.stringify({
-          ...valuesObj,
+          values: valuesObj,
           desc: desc,
           total: 0,
           avg: 0
@@ -60,14 +61,12 @@ const DiePage = ({ die }) => {
     .catch(err => console.log("man, you goofed"))
   }
 
-  const displayDice = dice.map(d => <DieCard key={d.id} die={d} />)
-
   return (
     <div>
       {die}
       <DieForm addDie={addDie} />
-      <DieDisplay />
-      {displayDice}
+      { selectedDie === null ? null : <DieDisplay die={selectedDie} /> }
+      <DieList diePage={die} dice={dice} setSelectedDie={setSelectedDie} />
     </div>
   )
 }
